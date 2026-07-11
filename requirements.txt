@@ -1,0 +1,8 @@
+Flask==2.3.3
+Flask-CORS==4.0.0
+Flask-SQLAlchemy==3.0.5
+torch==2.0.1
+transformers==4.33.2
+gunicorn==21.2.0
+python-dotenv==1.0.0
+PyJWT==2.8.0
