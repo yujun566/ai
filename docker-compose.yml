@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+      - ADMIN_MASTER_KEY=🔮🌌⚡🎭🦾💫🌀🔥⭐🎯
+      - SECRET_KEY=your-secret-key
+    volumes:
+      - .:/app
+    restart: unless-stopped
