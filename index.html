@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코딩 AI - 프리미엄 서비스</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Monaco', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: #e8e8e8;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: #1e1e1e;
+            border: 1px solid #404040;
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .auth-card h2 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 15px;
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            color: #e8e8e8;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .auth-toggle a {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #5f0000;
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .admin-btn {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #404040;
+        }
+
+        .admin-btn button {
+            background: transparent;
+            color: #888;
+            border: 1px solid #404040;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .admin-btn button:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .chat-app {
+            display: none;
+        }
+
+        .navbar {
+            background: #1e1e1e;
+            border-bottom: 1px solid #404040;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar h1 {
+            font-size: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge.free {
+            background: #404040;
+            color: #aaa;
+        }
+
+        .badge.premium {
+            background: #d4af37;
+            color: #000;
+        }
+
+        .badge.admin {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        .navbar-btn {
+            background: #2d2d2d;
+            color: #e8e8e8;
+            border: 1px solid #404040;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .navbar-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 28px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .chat-section {
+            background: #1e1e1e;
+            border: 1px solid #404040;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #2d2d2d;
+            padding: 15px 20px;
+            border-bottom: 1px solid #404040;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .language-select {
+            background: #1e1e1e;
+            color: #e8e8e8;
+            border: 1px solid #404040;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        .user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .bot .message-content {
+            background: #2d2d2d;
+            color: #e8e8e8;
+            border: 1px solid #404040;
+        }
+
+        .response-meta {
+            font-size: 10px;
+            color: #888;
+            margin-top: 5px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .speed-badge {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .cache-badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        .message-content pre {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 8px 0;
+            border: 1px solid #404040;
+        }
+
+        .loading {
+            display: flex;
+            gap: 5px;
+        }
+
+        .loading span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: bounce 1.4s infinite;
+        }
+
+        .loading span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { opacity: 0.3; }
+            40% { opacity: 1; }
+        }
+
+        .chat-input {
+            border-top: 1px solid #404040;
+            padding: 15px;
+            background: #2d2d2d;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input textarea {
+            flex: 1;
+            background: #1e1e1e;
+            border: 1px solid #404040;
+            color: #e8e8e8;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: inherit;
+            resize: none;
+        }
+
+        .chat-input button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .premium-prompt {
+            background: #1a3a3a;
+            border: 1px solid #4a7a7a;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .premium-prompt h3 {
+            color: #61dafb;
+            margin-bottom: 10px;
+        }
+
+        .premium-prompt p {
+            color: #aaa;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .premium-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .admin-panel {
+            display: none;
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .admin-panel h3 {
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .users-table th, .users-table td {
+            padding: 10px;
+            border-bottom: 1px solid #404040;
+            text-align: left;
+        }
+
+        .users-table th {
+            background: #1e1e1e;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .message-content {
+                max-width: 95%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-section {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 인증 화면 -->
+    <div id="authContainer" class="auth-container">
+        <div class="auth-card">
+            <h2 id="authTitle">로그인</h2>
+            <div class="error-message" id="errorMessage"></div>
+            
+            <!-- 로그인 폼 -->
+            <div id="loginForm">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>아이디</label>
+                        <input type="text" id="loginUsername" placeholder="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호</label>
+                        <input type="password" id="loginPassword" placeholder="password" required>
+                    </div>
+                    <button type="submit" class="btn">로그인</button>
+                </form>
+                <div class="auth-toggle">
+                    계정이 없으신가요? <a onclick="toggleAuth()">가입하기</a>
+                </div>
+            </div>
+
+            <!-- 가입 폼 -->
+            <div id="registerForm" style="display: none;">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>아이디</label>
+                        <input type="text" id="regUsername" placeholder="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>이메일</label>
+                        <input type="email" id="regEmail" placeholder="email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>비밀번호</label>
+                        <input type="password" id="regPassword" placeholder="6자 이상" required>
+                    </div>
+                    <button type="submit" class="btn">가입</button>
+                </form>
+                <div class="auth-toggle">
+                    이미 가입하셨나요? <a onclick="toggleAuth()">로그인</a>
+                </div>
+            </div>
+
+            <div class="admin-btn">
+                <button onclick="showAdminLogin()">어드민 로그인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 어드민 로그인 모달 -->
+    <div id="adminModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+        <div class="auth-card">
+            <h2>어드민 로그인</h2>
+            <p style="color: #aaa; font-size: 12px; margin-bottom: 20px; text-align: center;">마스터 키를 입력하세요</p>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>마스터 키</label>
+                    <input type="password" id="adminKey" placeholder="외계어 같은 키..." required>
+                </div>
+                <button type="submit" class="btn">로그인</button>
+            </form>
+            <button onclick="closeAdminModal()" class="btn" style="background: #404040; margin-top: 10px;">취소</button>
+        </div>
+    </div>
+
+    <!-- 채팅 앱 -->
+    <div id="chatApp" class="chat-app">
+        <div class="navbar">
+            <div class="navbar-left">
+                <h1>💻 코딩 AI</h1>
+                <select id="langSelect" class="language-select">
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                    <option value="cpp">C++</option>
+                    <option value="csharp">C#</option>
+                    <option value="php">PHP</option>
+                    <option value="ruby">Ruby</option>
+                    <option value="go">Go</option>
+                    <option value="rust">Rust</option>
+                    <option value="typescript">TypeScript</option>
+                    <option value="sql">SQL</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="bash">Bash</option>
+                    <option value="general">일반</option>
+                </select>
+            </div>
+            <div class="navbar-right">
+                <div class="user-info">
+                    <span id="usernameDisplay"></span>
+                    <span class="badge" id="subBadge"></span>
+                </div>
+                <button class="navbar-btn" onclick="showAdminPanel()" id="adminPanelBtn" style="display: none;">어드민</button>
+                <button class="navbar-btn" onclick="logout()">로그아웃</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>오늘 사용</h3>
+                    <div class="number" id="todayRequests">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>일일 제한</h3>
+                    <div class="number" id="dailyLimit">3</div>
+                </div>
+                <div class="stat-card">
+                    <h3>월간 사용</h3>
+                    <div class="number" id="monthRequests">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>상태</h3>
+                    <div class="number" id="status" style="font-size: 14px;">준비됨</div>
+                </div>
+            </div>
+
+            <div id="premiumPrompt" class="premium-prompt" style="display: none;">
+                <h3>⭐ 더 많이 사용하고 싶으신가요?</h3>
+                <p>프리미엄 구독으로 일일 제한을 20번까지 늘리세요!</p>
+                <button class="premium-btn" onclick="handleSubscribe()">월간 9.99$ 구독</button>
+            </div>
+
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h3>💬 대화</h3>
+                    <span id="remainingText" style="font-size: 12px; color: #aaa;"></span>
+                </div>
+                <div class="chat-box" id="chatBox">
+                    <div style="color: #aaa; font-size: 13px; text-align: center;">
+                        👋 코딩 질문을 시작하세요!
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <textarea id="messageInput" placeholder="코딩 질문을 입력..." rows="1"></textarea>
+                    <button onclick="sendMessage()">전송</button>
+                </div>
+            </div>
+
+            <!-- 어드민 패널 -->
+            <div class="admin-panel" id="adminPanel">
+                <h3>👨‍💼 어드민 패널</h3>
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>아이디</th>
+                            <th>이메일</th>
+                            <th>구독</th>
+                            <th>오늘</th>
+                            <th>월간</th>
+                            <th>액션</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let token = null;
+        let currentUser = null;
+
+        // =============== 인증 ===============
+        function toggleAuth() {
+            document.getElementById('loginForm').style.display = 
+                document.getElementById('loginForm').style.display === 'none' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = 
+                document.getElementById('registerForm').style.display === 'none' ? 'block' : 'none';
+            document.getElementById('authTitle').textContent = 
+                document.getElementById('loginForm').style.display === 'none' ? '가입' : '로그인';
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            setTimeout(() => {
+                errorEl.style.display = 'none';
+            }, 5000);
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.error);
+                    return;
+                }
+
+                token = data.token;
+                localStorage.setItem('token', token);
+                loadProfile();
+                showChatApp();
+            } catch (error) {
+                showError('로그인 실패: ' + error.message);
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.error);
+                    return;
+                }
+
+                token = data.token;
+                localStorage.setItem('token', token);
+                alert('가입 완료! API 키: ' + data.api_key);
+                loadProfile();
+                showChatApp();
+            } catch (error) {
+                showError('가입 실패: ' + error.message);
+            }
+        }
+
+        function showAdminLogin() {
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const masterKey = document.getElementById('adminKey').value;
+
+            try {
+                const response = await fetch('/api/auth/admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ master_key: masterKey })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.error);
+                    return;
+                }
+
+                token = data.token;
+                localStorage.setItem('token', token);
+                closeAdminModal();
+                loadProfile();
+                showChatApp();
+            } catch (error) {
+                showError('어드민 로그인 실패: ' + error.message);
+            }
+        }
+
+        // =============== 프로필 로드 ===============
+        async function loadProfile() {
+            try {
+                const response = await fetch('/api/user/profile', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                const data = await response.json();
+                currentUser = data;
+
+                document.getElementById('usernameDisplay').textContent = data.username;
+                
+                let badgeText = data.is_admin ? '🔑 어드민' : (data.is_premium ? '⭐ 프리미엄' : '무료');
+                let badgeClass = data.is_admin ? 'admin' : (data.is_premium ? 'premium' : 'free');
+                
+                const badge = document.getElementById('subBadge');
+                badge.textContent = badgeText;
+                badge.className = 'badge ' + badgeClass;
+
+                document.getElementById('todayRequests').textContent = data.requests_today;
+                document.getElementById('monthRequests').textContent = data.total_requests_month;
+                document.getElementById('dailyLimit').textContent = data.daily_limit;
+
+                if (data.is_admin) {
+                    document.getElementById('adminPanelBtn').style.display = 'inline-block';
+                    loadAdminPanel();
+                }
+
+                updatePremiumPrompt();
+                updateRemainingRequests();
+            } catch (error) {
+                showError('프로필 로드 실패: ' + error.message);
+            }
+        }
+
+        function updatePremiumPrompt() {
+            const prompt = document.getElementById('premiumPrompt');
+            if (!currentUser.is_premium && !currentUser.is_admin && currentUser.requests_today >= currentUser.daily_limit) {
+                prompt.style.display = 'block';
+            } else {
+                prompt.style.display = 'none';
+            }
+        }
+
+        function updateRemainingRequests() {
+            const remaining = currentUser.daily_limit - currentUser.requests_today;
+            document.getElementById('remainingText').textContent = 
+                `남은 요청: ${Math.max(0, remaining)}`;
+        }
+
+        async function handleSubscribe() {
+            try {
+                const response = await fetch('/api/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ plan: 'premium' })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.error);
+                    return;
+                }
+
+                alert('프리미에 구독이 활성화되었습니다!');
+                loadProfile();
+            } catch (error) {
+                showError('구독 실패: ' + error.message);
+            }
+        }
+
+        // =============== 채팅 ===============
+        async function sendMessage() {
+            const message = document.getElementById('messageInput').value.trim();
+            const language = document.getElementById('langSelect').value;
+
+            if (!message) return;
+
+            // UI 업데이트
+            addMessage(message, true);
+            document.getElementById('messageInput').value = '';
+
+            try {
+                const startTime = performance.now();
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ message, language })
+                });
+                const endTime = performance.now();
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    addMessage('❌ ' + data.error, false);
+                    return;
+                }
+
+                addMessage(data.message, false);
+                
+                // ⚡ 초고속 응답 시간 표시
+                const totalTime = Math.round(endTime - startTime);
+                const aiTime = data.response_time_ms || totalTime - 100;
+                
+                const lastMsg = document.querySelector('.message:last-child .message-content');
+                if (lastMsg && totalTime < 5000) {  // 5초 이상이면 표시 안 함
+                    const metaDiv = document.createElement('div');
+                    metaDiv.style.cssText = 'font-size: 9px; color: #00ff00; margin-top: 5px; display: flex; gap: 8px;';
+                    metaDiv.innerHTML = `
+                        <span style="background: linear-gradient(135deg, #00ff00, #00cc00); color: #000; padding: 1px 4px; border-radius: 2px; font-weight: bold;">⚡ ${aiTime}ms</span>
+                        ${data.from_cache ? `<span style="background: #667eea; color: white; padding: 1px 4px; border-radius: 2px;">💾 캐시</span>` : ''}
+                    `;
+                    lastMsg.appendChild(metaDiv);
+                }
+                
+                currentUser.requests_today = data.remaining_requests ? 
+                    (data.daily_limit - data.remaining_requests) : currentUser.requests_today + 1;
+                
+                loadProfile();
+            } catch (error) {
+                addMessage('❌ 오류: ' + error.message, false);
+            }
+        }
+
+        function addMessage(text, isUser) {
+            const chatBox = document.getElementById('chatBox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + (isUser ? 'user' : 'bot');
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text;
+
+            messageDiv.appendChild(contentDiv);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // =============== 어드민 ===============
+        function showAdminPanel() {
+            document.getElementById('adminPanel').style.display = 
+                document.getElementById('adminPanel').style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function loadAdminPanel() {
+            try {
+                const response = await fetch('/api/admin/users', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                const data = await response.json();
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '';
+
+                data.users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.is_premium ? '⭐' : '무료'}</td>
+                        <td>${user.requests_today}</td>
+                        <td>${user.total_requests_month}</td>
+                        <td><button class="navbar-btn" onclick="resetUser(${user.id})">초기화</button></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                showError('어드민 패널 로드 실패: ' + error.message);
+            }
+        }
+
+        async function resetUser(userId) {
+            try {
+                const response = await fetch(`/api/admin/reset-user/${userId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert('초기화되었습니다');
+                    loadAdminPanel();
+                }
+            } catch (error) {
+                showError('초기화 실패: ' + error.message);
+            }
+        }
+
+        // =============== 유틸리티 ===============
+        function showChatApp() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('chatApp').style.display = 'block';
+        }
+
+        function logout() {
+            token = null;
+            localStorage.removeItem('token');
+            location.reload();
+        }
+
+        // 초기화
+        window.addEventListener('load', () => {
+            const savedToken = localStorage.getItem('token');
+            if (savedToken) {
+                token = savedToken;
+                loadProfile();
+                showChatApp();
+            }
+        });
+
+        // Shift+Enter로 보내기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey && document.getElementById('messageInput') === document.activeElement) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
